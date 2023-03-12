@@ -6,6 +6,7 @@ public class Player : MonoBehaviour
 {
     [SerializeField] private float Speed;
     [SerializeField] private float Jump;
+    [SerializeField] private Transform InitialPosition;
 
     private Animator anim;
     private Rigidbody2D rb;
@@ -18,6 +19,8 @@ public class Player : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
 
         _jumpForce = Vector2.up * Jump;
+
+        Respawn();
     }
 
     private void Update()
@@ -42,6 +45,24 @@ public class Player : MonoBehaviour
         } else if (direction < 0)
         {
             transform.eulerAngles = new Vector3(0, 180, 0);
+        }
+    }
+
+    public void Respawn()
+    {
+        float positionX = PlayerPrefs.GetFloat("checkpointX");
+        float positionY = PlayerPrefs.GetFloat("checkpointY");
+
+        Vector3 checkpointPosition = new Vector3(positionX, positionY, 0);
+
+        rb.velocity = Vector2.zero;
+
+        if (checkpointPosition != Vector3.zero)
+        {
+            transform.position = checkpointPosition;
+        } else
+        {
+            transform.position = InitialPosition.position;
         }
     }
 }
