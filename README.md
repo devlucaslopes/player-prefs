@@ -1,2 +1,1 @@
-# checkpoint-system
- 
+![Vídeo completo no Youtube](cover.png)
