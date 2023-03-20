@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Player : MonoBehaviour
 {
@@ -48,21 +49,30 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void Respawn()
+    private void Respawn()
     {
-        float positionX = PlayerPrefs.GetFloat("checkpointX");
-        float positionY = PlayerPrefs.GetFloat("checkpointY");
+        float x = PlayerPrefs.GetFloat("checkpointX");
+        float y = PlayerPrefs.GetFloat("checkpointY");
 
-        Vector3 checkpointPosition = new Vector3(positionX, positionY, 0);
+        Vector2 checkpointPosition = new Vector2(x, y);
 
-        rb.velocity = Vector2.zero;
-
-        if (checkpointPosition != Vector3.zero)
+        if (checkpointPosition != Vector2.zero)
         {
             transform.position = checkpointPosition;
         } else
         {
             transform.position = InitialPosition.position;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Checkpoint"))
+        {
+            Vector2 position = collision.transform.position;
+
+            PlayerPrefs.SetFloat("checkpointX", position.x);
+            PlayerPrefs.SetFloat("checkpointY", position.y);
         }
     }
 }
